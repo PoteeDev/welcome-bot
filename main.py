@@ -5,7 +5,7 @@ import strings
 import user
 from telebot import types
 
-bot = telebot.TeleBot("5274220415:AAG2RQpuD2x_AOSGFP7NbxRjEFhP5US1gtk")
+bot = telebot.TeleBot("")
 users = {}
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
