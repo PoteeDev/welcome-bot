@@ -24,7 +24,7 @@ def send_welcome(message):
     db.users[user.chat_id] = user
     db.save()
 
-    loading_widget(message.chat.id, "Давай познакомимся\nСкажи мне свои фамилию и имя.")
+    loading_widget(message.chat.id, "Давай познакомимся.\nСкажи мне свои фамилию и имя.")
 
 
 def loading_widget(chat_id, next_message):
@@ -45,12 +45,14 @@ def get_users_card(chat_id):
     db = Users()
     users_info = db.users.get(chat_id)
     if users_info:
-        message = f"Давай проверим.\nТебя зовут {users_info.name}\nТы учишься в группе {users_info.group}"
         if users_info.team:
-            message += f"\nТвоя команда называется {users_info.team}"
-            return message
-        message += "\nКоманды у тебя пока нет"
-        return message
+            start = "Отлично!\n"
+            end = f"\nТы из команды {users_info.team}."
+        else:
+            start = "Помни, что у тебя ещё есть время найти себе кого-то в команду или присоединиться к одной из уже существующих.\n"
+            end = "\nНа данный момент у тебя нет команды."
+        message = f"А теперь давай сверим твои данный ещё раз:\nТебя зовут {users_info.name}.\nТы учишься в группе {users_info.group}."
+        return start + message + end
 
 
 @bot.message_handler(func=lambda message: True)
@@ -65,7 +67,8 @@ def echo_all(message):
             db.users[chat_id].status += 1
             db.save()
             logger.info(f"{chat_id}:{db.users[chat_id].username} add name: {text}")
-            bot.send_message(chat_id=message.chat.id, text='А какая у тебя группа?')
+            bot.send_message(chat_id=message.chat.id, text='А меня зовут Поти. Ты ещё узнаешь обо мне немного позже '
+                                                           '😉\nМне любопытно узнать: из какой ты группы?')
 
 
         elif db.users[chat_id].status == 2:
@@ -75,7 +78,7 @@ def echo_all(message):
             logger.info(f"{chat_id}:{db.users[chat_id].username} add group: {text}")
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True).row(types.KeyboardButton('Да'),
                                                                          types.KeyboardButton('Нет'))
-            bot.send_message(chat_id=message.chat.id, reply_markup=markup, text="У тебя есть команда?")
+            bot.send_message(chat_id=message.chat.id, reply_markup=markup, text="Есть ли у тебя команда?")
 
         elif db.users[chat_id].status == 3:
             if text.lower() == "да":
@@ -109,10 +112,12 @@ def echo_all(message):
         elif db.users[chat_id].status == 5:
             if text.lower() == "да":
                 db.users[chat_id].status = 10
-                text = "Поздравляю!\nЯ принял твою заявку, теперь ты можешь подписаться на канал <название канала>." \
-                       "\nТам я постараюсь сообщать полезную для тебя информацию."
+                text = "Хорошо, тогда я отправляю твою заявку организаторам соревнований." \
+                       "А ты в этом время можешь присоединиться к нашему чату <>,"
                 if not db.users[chat_id].team:
-                    text += ", а в чате <название чата> ты сможешь собрать свою команду или присоединиться к кому-нибудь."
+                    text += "где ты можешь найти себе команду или просто поболтать с другими участниками. Удачи!"
+                else:
+                    text += "где ты можешь поболтать с другими участниками. Удачи!"
                 logger.info(f"{chat_id}:{db.users[chat_id].username} finish registration")
                 bot.send_message(chat_id=message.chat.id,
                                  text=text,
