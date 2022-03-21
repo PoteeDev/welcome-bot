@@ -10,11 +10,18 @@ token = os.getenv("BOT_TOKEN")
 bot = telebot.TeleBot(token)
 
 
+@bot.message_handler(commands=['privacy'])
+def send_policy(message):
+    filename = 'privacy-policy.txt'
+    with open(filename, 'r') as file:
+        bot.send_document(message.chat.id, file, visible_file_name=filename)
+
+
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     db = Users()
     user = User()
-    user.chat_id = message.chat.id
+    user.chat_id = str(message.chat.id)
     user.status = 1
     user.username = message.from_user.username
     if db.users.get(user.chat_id):
@@ -51,7 +58,7 @@ def get_users_card(chat_id):
         else:
             start = "Помни, что у тебя ещё есть время найти себе кого-то в команду или присоединиться к одной из уже существующих.\n"
             end = "\nНа данный момент у тебя нет команды."
-        message = f"А теперь давай сверим твои данный ещё раз:\nТебя зовут {users_info.name}.\nТы учишься в группе {users_info.group}."
+        message = f"А теперь давай сверим твои данные ещё раз:\nТебя зовут {users_info.name}.\nТы учишься в группе {users_info.group}."
         return start + message + end
 
 
