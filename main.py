@@ -131,10 +131,10 @@ def echo_all(message):
                                  reply_markup=types.ReplyKeyboardRemove(selective=False))
                 db.save()
             else:
-                logger.warn(f"{chat_id}:{db.users[chat_id].username} unsupported answer: {text}")
+                logger.warning(f"{chat_id}:{db.users[chat_id].username} unsupported answer: {text}")
                 bot.send_message(chat_id=message.chat.id, text='Я понимаю только бинарные ответы "Да" или "Нет"')
         else:
-            logger.warn(f"{chat_id}:{db.users[chat_id].username} receive: {text}")
+            logger.warning(f"{chat_id}:{db.users[chat_id].username} receive: {text}")
 
 
 if __name__ == '__main__':
