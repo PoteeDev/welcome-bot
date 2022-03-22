@@ -128,7 +128,7 @@ def echo_all(message):
                 logger.info(f"{chat_id}:{db.users[chat_id].username} finish registration")
                 bot.send_message(chat_id=message.chat.id,
                                  text=text,
-                                 parse_mode="MarkdownV2"
+                                 parse_mode="MarkdownV2",
                                  reply_markup=types.ReplyKeyboardRemove(selective=False))
                 db.save()
             elif text.lower() == "нет":
