@@ -74,7 +74,7 @@ def echo_all(message):
             db.users[chat_id].status += 1
             db.save()
             logger.info(f"{chat_id}:{db.users[chat_id].username} add name: {text}")
-            bot.send_message(chat_id=message.chat.id, text='А меня зовут Поти. Ты ещё узнаешь обо мне немного позже '
+            bot.send_message(chat_id=message.chat.id, text='А меня зовут Поти. Ты ещё узнаешь обо мне немного позже'
                                                            '😉\nМне любопытно узнать: из какой ты группы?')
 
 
