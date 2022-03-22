@@ -119,12 +119,12 @@ def echo_all(message):
         elif db.users[chat_id].status == 5:
             if text.lower() == "да":
                 db.users[chat_id].status = 10
-                text = "Хорошо, тогда я отправляю твою заявку организаторам соревнований." \
+                text = "Хорошо, тогда я отправляю твою заявку организаторам соревнований\." \
                        "А ты в этом время можешь присоединиться к нашему [чату](https://t.me/potee_stream), "
                 if not db.users[chat_id].team:
-                    text += "где ты можешь найти себе команду или просто поболтать с другими участниками. Удачи!"
+                    text += "где ты можешь найти себе команду или просто поболтать с другими участниками\. Удачи!"
                 else:
-                    text += "где ты можешь поболтать с другими участниками. Удачи!"
+                    text += "где ты можешь поболтать с другими участниками\. Удачи!"
                 logger.info(f"{chat_id}:{db.users[chat_id].username} finish registration")
                 bot.send_message(chat_id=message.chat.id,
                                  text=text,
